@@ -17,12 +17,4 @@ docker-compose run --name python python
 docker start -a -i python
 ```
 
-## MySQL kontejner
-
-k vyčištěšní diku a restartu udělat: 
-
-```
-docker-compose down --volumes
-docker system prune --all
-```
 
