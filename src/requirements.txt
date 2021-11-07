@@ -1,0 +1,4 @@
+elasticsearch
+mysql-connector-python
+requests
+tqdm

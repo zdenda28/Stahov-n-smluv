@@ -1,0 +1,75 @@
+version: '3.6'
+
+volumes:
+  mysql_data:
+  elasticsearch-data:
+    driver: local
+
+services:  
+  mysql:
+    image: mysql:8.0
+    container_name: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: mydb
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./docker/mysql/db.sql:/docker-entrypoint-initdb.d/db.sql
+      - mysql_data:/var/lib/mysql/
+    cap_add:
+      - SYS_NICE
+    logging:
+      driver: none
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.15.0
+    container_name: elasticsearch
+    environment:
+      - xpack.security.enabled=false
+      - discovery.type=single-node
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536
+        hard: 65536
+    cap_add:
+      - IPC_LOCK
+    volumes:
+      - elasticsearch-data:/usr/share/elasticsearch/data
+    ports:
+      - 9200:9200
+      - 9300:9300
+    mem_limit: 1gb
+    logging:
+      driver: none
+
+  kibana:
+    container_name: kibana
+    image: docker.elastic.co/kibana/kibana:7.15.0
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+    ports:
+      - 5601:5601
+    depends_on:
+      - elasticsearch
+    logging:
+      driver: none
+    mem_limit: 1gb
+
+  python:
+    container_name: python
+    build:
+      context: .
+      dockerfile: docker/python/Dockerfile
+    profiles:
+      - donotstart
+    environment:
+     - PYTHONUNBUFFERED=1
+    tty: true
+    depends_on:
+      - mysql
+      - elasticsearch
