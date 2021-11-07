@@ -1,4 +1,10 @@
-# Diplomka-ETL-script
+# Diplomová práce - Analýza dat z registru smluv v kontextu způsobu řízení projektů ve veřejné správě v ČR
+
+Autor: Zdeněk Tomka
+
+Popis: Repozitář obsahuje potřebné zdrojové soubory k nastartování systému navrženého v diplomové práci včetně scriptu, který stahuje stahuje ICT smlouvy z Registru smluv.
+
+## Spuštění
 
 Nastartování systému:
 
