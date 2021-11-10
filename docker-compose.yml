@@ -43,7 +43,6 @@ services:
     ports:
       - 9200:9200
       - 9300:9300
-    mem_limit: 1gb
     logging:
       driver: none
 
@@ -58,7 +57,6 @@ services:
       - elasticsearch
     logging:
       driver: none
-    mem_limit: 1gb
 
   python:
     container_name: python
