@@ -1,4 +1,4 @@
-# Diplomová práce - Analýza dat z registru smluv v kontextu způsobu řízení projektů ve veřejné správě v ČR
+# Diplomová práce - Implementace nástroje pro analýzu dat z Registru smluv
 
 Autor: Zdeněk Tomka
 
