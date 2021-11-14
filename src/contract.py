@@ -3,9 +3,13 @@ import xml.etree.ElementTree as ET
 from tqdm import tqdm
 import db
 import elastic
+import ares
 
 
-def get_contract(identifier, api_key): # TODO api key sem musí jít jako parametr
+supplier_code_table = db.load_supplier_code_table()
+
+
+def get_contract(identifier, api_key):
     # Funkce vrací fulltext smlouvy poskytovaný zpracovaný Hlídačem státu
     identifier = str(identifier)
     headers = {'Authorization': 'Token ' + api_key}  # TODO API key předávat jako arg nebo env proměnnou dockerem
@@ -54,10 +58,28 @@ def load_contracts(date, api_key):
             # identifier[0] obsahuje identifikátor smlouvy
             # identifier[1] obsahuje pole IČA dodavatelů
             for ICO in identifier[1]:
-                if db.find_ict_supplier(ICO):
+                ict_supplier = supplier_code_table.get(int(ICO))  # načtení dodavatele z číselníku v paměti
+                if ict_supplier == 1:  # je to ict dodavatel
                     contract_dict = get_contract(identifier[0], api_key)
                     elastic.insert_into_elastic(identifier[0], contract_dict["metadata"], contract_dict["text"])
                     break
+                elif ict_supplier == 0:  # není ict dodavatel
+                    pass
+                elif ict_supplier is None:  # dodavatel není v číselníku
+                    if ares.is_subject_ict(ICO):  # je to ict dodavatel
+                        supplier_code_table[int(ICO)] = 1
+                        contract_dict = get_contract(identifier[0], api_key)
+                        elastic.insert_into_elastic(identifier[0], contract_dict["metadata"], contract_dict["text"])
+                        break
+                    else:
+                        supplier_code_table[int(ICO)] = 0
+
+
+
+
+
+
+
 
 
 

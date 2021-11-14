@@ -49,3 +49,15 @@ def find_ict_supplier(ico):
         # dotazování do aresu a vložení do db
         ares.is_subject_ict(ico)
 
+
+def load_supplier_code_table():
+    db = create_db_conn()
+    cursor = db.cursor()
+    sql = "SELECT ico, ict_supplier FROM dodavatele"
+    cursor.execute(sql)
+    records = cursor.fetchall()
+    supplier_code_table_dict = {}
+
+    for record in records:
+        supplier_code_table_dict[record[0]] = record[1]
+    return supplier_code_table_dict
