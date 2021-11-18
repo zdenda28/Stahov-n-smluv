@@ -43,10 +43,9 @@ def reindex_keyword_filter():
             "query": {
                 "query_string": {
                     "default_field": "*",
-                    "query": "android OR (aplikac*) OR (cloud*) OR (databáz*) OR (disk*) OR (hardwar*) OR (hw) OR ICT "
-                             "OR iOS OR IS OR LCD OR linux OR (notebook*) OR PC OR (počítač*) OR (procesor*) OR SEO "
-                             "OR server OR (softwar*) OR SSD OR SW OR (switch*) OR (systém*) OR (telekomunika*) OR "
-                             "upgrade OR (web*) OR wifi OR windows "
+                    "query": "NOT nemocnice AND ((hardwar*) OR hw OR softwar* OR SW OR LCD OR SSD OR (notebook*) OR ("
+                             "počítač*) OR (procesor*) OR upgrade OR wifi OR windows OR linux OR android OR ios OR "
+                             "ICT OR switch*) "
                 }
             }
         },
