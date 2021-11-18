@@ -34,3 +34,23 @@ def insert_into_elastic(contract_id, contract_metadata, contract_text):
     res = es.index(index="contracts", id=contract_id, body=doc)
 
 
+def reindex_keyword_filter():
+    print("Probíhá reindexace ICT smluv na pozadí, tato operace může trvat několik minut...")
+    es = create_elastic_conn()
+    result = es.reindex(body={
+        "source": {
+            "index": 'contracts',
+            "query": {
+                "query_string": {
+                    "default_field": "*",
+                    "query": "android OR (aplikac*) OR (cloud*) OR (databáz*) OR (disk*) OR (hardwar*) OR (hw) OR ICT "
+                             "OR iOS OR IS OR LCD OR linux OR (notebook*) OR PC OR (počítač*) OR (procesor*) OR SEO "
+                             "OR server OR (softwar*) OR SSD OR SW OR (switch*) OR (systém*) OR (telekomunika*) OR "
+                             "upgrade OR (web*) OR wifi OR windows "
+                }
+            }
+        },
+        "dest": {
+            "index": 'ict_contracts'
+        }
+    }, wait_for_completion=False, scroll="1m")

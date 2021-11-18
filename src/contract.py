@@ -73,6 +73,7 @@ def load_contracts(date, api_key):
                         break
                     else:
                         supplier_code_table[int(ICO)] = 0
+        elastic.reindex_keyword_filter()  # reindexování smluv dle klíčových ICT slov
 
 
 
