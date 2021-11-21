@@ -23,4 +23,10 @@ docker-compose run --name python python
 docker start -a -i python
 ```
 
+## Prohlížení dat v Kibaně
+
+```
+localhost:5601
+```
+
 
